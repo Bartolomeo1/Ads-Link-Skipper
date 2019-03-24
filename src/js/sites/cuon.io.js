@@ -7,7 +7,7 @@ Script for cuon.io
 
 **/ 
 
-window.onload = function(){
+window.addEventListener("load", () => {
 	
 	let captchaInterval = setInterval(() => {
 		var btn = xp('//*[@id="invisibleCaptchaShortlink"]');
@@ -24,9 +24,9 @@ window.onload = function(){
 		
 	}, 500);
 	
-}
+});
 
-
+/** xPath function */
 function xp(query) {
-    return document.evaluate(query, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+	return document.evaluate(query, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
 }

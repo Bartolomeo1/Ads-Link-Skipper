@@ -7,6 +7,8 @@ Background script
 
 **/
 
+
+// Enabled sites variable switch
 var enabled_sites = {
     adfly: true,
     shinkme: true,
@@ -14,10 +16,13 @@ var enabled_sites = {
     croco: true,
     linkshrink: true,
     ouo: true,
-    cuon: false,
+    bluemediafiles: true,
+    spam: true,
     captcha: false,
-    spam: true
+    cuon: false
 }
+
+/******************** Storage manager start */
 
 function save_sites() {
     chrome.storage.local.set({
@@ -40,12 +45,14 @@ chrome.storage.local.get('enabled_sites', function(result) {
             croco: true,
             linkshrink: true,
             ouo: true,
-            cuon: false,
+            bluemediafiles: true,
+            spam: true,
             captcha: false,
-            spam: true
+            cuon: false
         }
     }
 
+    // Disable disabled functions
     if ((enabled_sites != null && enabled_sites.captcha == null)) {
         enabled_sites.captcha = false;
         enabled_sites.cuon = false;
@@ -53,8 +60,12 @@ chrome.storage.local.get('enabled_sites', function(result) {
 
 });
 
+/******************** Storage manager end */
 
 
+/******************** Domain list start */
+
+// sh.st domain list
 var requestFilter_sh = {
     urls: [
         "*://*.sh.st/*",
@@ -75,6 +86,7 @@ var requestFilter_sh = {
     ]
 };
 
+// Spam/Popup's domain list
 var requestFilter_spam = {
     urls: [
         "*://*.higheurest.com/*",
@@ -148,8 +160,15 @@ var requestFilter_spam = {
     ]
 };
 
+// Adf.ly domains list
 var requestFilter_adf = {
     urls: [
+        "*://*.uclaut.net/*",
+        "*://*.atabencot.net/*",
+        "*://*.thouth.net/*",
+        "*://*.cinebo.net/*",
+        "*://*.dapalan.com/*",
+        "*://*.vaussneim.net/*",
         "*://*.briskgram.net/*",
         "*://*.swiftviz.net/*",
         "*://*.kudoflow.com/*",
@@ -196,6 +215,7 @@ var requestFilter_adf = {
     ]
 };
 
+// shink.me domain list
 var requestFilter_shinkme = {
     urls: [
         "*://*.shon.xyz/*",
@@ -205,6 +225,7 @@ var requestFilter_shinkme = {
     ]
 };
 
+// ouo.io domain list
 var requestFilter_ouo = {
     urls: [
         "*://*.ouo.io/*",
@@ -212,45 +233,55 @@ var requestFilter_ouo = {
     ]
 };
 
+// cuon domain list
 var requestFilter_cuon = {
     urls: [
         "*://*.cuon.io/*"
     ]
 };
 
+// tmearn domain list
 var requestFilter_tmearn = {
     urls: [
         "*://*.tmearn.com/*"
     ]
 };
 
+// croco domain list
 var requestFilter_croco = {
     urls: [
         "*://*.croco.site/*"
     ]
 };
 
+// LinkShrink domain list
 var requestFilter_linkshrink = {
     urls: [
         "*://*.linkshrink.net/*"
     ]
 };
 
-var requestFilter_captcha = {
+// Bluemediafiles domain list.
+var requestFilter_bluemefi = {
     urls: [
-        "*://www.google.com/recaptcha/*"
+        "*://*.bluemediafiles.com/*"
     ]
 };
 
-/** Captcha sites **/
+/******************** Domain list end */
+
+
+/******************** Sites script's start */
+
+/** Bluemediafiles sites **/
 chrome.webRequest.onCompleted.addListener(function(details) {
-    if (!enabled_sites.captcha) return;
+    if (!enabled_sites.bluemediafiles) return;
     chrome.tabs.executeScript(details.tabId, {
-        file: "js/sites/recaptcha.js",
-        runAt: "document_start",
-        allFrames: true
+        file: "js/sites/BlueMediaFiles.js",
+        runAt: "document_start"
     });
-}, requestFilter_captcha);
+}, requestFilter_bluemefi);
+
 
 /** Adf.ly sites **/
 chrome.webRequest.onCompleted.addListener(function(details) {
@@ -261,6 +292,7 @@ chrome.webRequest.onCompleted.addListener(function(details) {
     });
 }, requestFilter_adf);
 
+
 /** Cuon.io sites **/
 chrome.webRequest.onCompleted.addListener(function(details) {
     if (!enabled_sites.cuon) return;
@@ -269,6 +301,7 @@ chrome.webRequest.onCompleted.addListener(function(details) {
         runAt: "document_start"
     });
 }, requestFilter_cuon);
+
 
 /** Croco.sites sites **/
 chrome.webRequest.onCompleted.addListener(function(details) {
@@ -292,8 +325,8 @@ chrome.webRequest.onCompleted.addListener(function(details) {
     });
 }, requestFilter_shinkme);
 
-
 /** ouo.io sites **/
+/* CURRENT DISABLED
 chrome.webRequest.onCompleted.addListener(function(details) {
     if (!enabled_sites.ouo || details.url.split("/")[3] == "rgo" && details.type != "main_frame") return;
     chrome.tabs.executeScript(details.tabId, {
@@ -301,6 +334,7 @@ chrome.webRequest.onCompleted.addListener(function(details) {
         runAt: "document_start"
     });
 }, requestFilter_ouo);
+*/
 
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
     if (!enabled_sites.ouo || details.url.split("/")[3] != "go" || details.url.split("/").lenght == 5) return;
@@ -318,6 +352,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
         requestHeaders: details.requestHeaders
     };
 }, requestFilter_ouo, ['requestHeaders', 'blocking']);
+
 
 /** LinkShrink sites **/
 chrome.webRequest.onCompleted.addListener(function(details) {
@@ -347,3 +382,5 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
         requestHeaders: headers
     };
 }, requestFilter_sh, ['requestHeaders', 'blocking']);
+
+/******************** Sites script's end */
