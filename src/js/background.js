@@ -268,6 +268,14 @@ var requestFilter_bluemefi = {
     ]
 };
 
+
+// Cloud Solver domain list.
+var requestFilter_cloudSolver = {
+    urls: [
+        "*://*.ouo.io/*"
+    ]
+};
+
 /******************** Domain list end */
 
 
@@ -384,3 +392,22 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
 }, requestFilter_sh, ['requestHeaders', 'blocking']);
 
 /******************** Sites script's end */
+
+/******************** CloudSolver script's start */
+
+chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
+    if (!enabled_sites.cloudSolver) return;
+    
+    let siteUrl = details.url;
+
+    // TODO > Check if database contains this link-id
+    if(true) return;
+
+    // Redirect user directly.
+    chrome.tabs.update(details.tabId, {
+        "url": newRef
+    });
+
+}, requestFilter_cloudSolver, ['requestHeaders', 'blocking']);
+
+/******************** CloudSolver script's end */
