@@ -7,10 +7,7 @@
         "email": "personal@nurio.me"
     }],
     "permissions": [
-        "tabs",
-        "activeTab",
         "webRequest",
-        "webNavigation",
         "webRequestBlocking",
         "storage",
 
